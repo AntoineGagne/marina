@@ -27,6 +27,9 @@ decode(?OP_READY, _) ->
 decode(?OP_AUTHENTICATE, Body) ->
     {Authenticator, <<>>} = marina_types:decode_string(Body),
     {ok, Authenticator};
+decode(?OP_SUPPORTED, Body) ->
+    {Options, <<>>} = marina_types:decode_string_multimap(Body),
+    {ok, Options};
 decode(?OP_RESULT, <<1:32/integer>>) ->
     {ok, undefined};
 decode(?OP_RESULT, <<2:32/integer, Rest/binary>>) ->
