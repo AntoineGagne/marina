@@ -44,6 +44,14 @@
     rows       = [] :: [[binary()]]
 }).
 
+-record(shard_info, {
+    shards_number    :: pos_integer(),
+    partitioner      :: binary(),
+    id               :: pos_integer(),
+    ignore_msb       :: integer(),
+    algorithm        :: binary()
+}).
+
 %% types
 -type buffer() :: #buffer {}.
 -type column_spec() :: #column_spec {}.
@@ -77,6 +85,7 @@
 
 -type result() :: #result {}.
 -type result_metadata() :: #result_metadata {}.
+-type shard_info() :: #shard_info {}.
 -type statement_id() :: binary().
 -type stream() :: 0..32768.
 -type value() :: binary().
