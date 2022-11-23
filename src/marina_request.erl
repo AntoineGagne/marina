@@ -9,7 +9,8 @@
     execute/4,
     prepare/3,
     query/4,
-    startup/1
+    startup/1,
+    options/1
 ]).
 
 %% public
@@ -93,6 +94,23 @@ startup(FrameFlags) ->
     marina_frame:encode(#frame {
         stream = ?DEFAULT_STREAM,
         opcode = ?OP_STARTUP,
+        flags = FrameFlags,
+        body = [marina_types:encode_string_map(Body)]
+    }).
+
+-spec options(frame_flag()) -> iolist().
+
+options(FrameFlags) ->
+    Body = case FrameFlags of
+        1 ->
+            [?CQL_VERSION, ?LZ4_COMPRESSION];
+        0 ->
+            [?CQL_VERSION]
+    end,
+
+    marina_frame:encode(#frame {
+        stream = ?DEFAULT_STREAM,
+        opcode = ?OP_OPTIONS,
         flags = FrameFlags,
         body = [marina_types:encode_string_map(Body)]
     }).

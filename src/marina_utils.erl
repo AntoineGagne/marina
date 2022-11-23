@@ -10,6 +10,7 @@
     query_opts/2,
     sync_msg/2,
     startup/1,
+    options/1,
     timeout/2,
     unpack/1,
     use_keyspace/1
@@ -104,6 +105,19 @@ sync_msg(Socket, Msg) ->
 startup(Socket) ->
     FrameFlags = frame_flags(),
     Msg = marina_request:startup(FrameFlags),
+    case marina_utils:sync_msg(Socket, Msg) of
+        {ok, Response} ->
+            {ok, Response};
+        {error, Reason} ->
+            {error, Reason}
+    end.
+
+-spec options(inet:socket()) ->
+    {ok, binary() | undefined} | {error, atom()}.
+
+options(Socket) ->
+    FrameFlags = frame_flags(),
+    Msg = marina_request:options(FrameFlags),
     case marina_utils:sync_msg(Socket, Msg) of
         {ok, Response} ->
             {ok, Response};
